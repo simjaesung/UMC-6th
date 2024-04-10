@@ -1,0 +1,125 @@
+.join-bg{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: skyblue;
+    top : 0;
+    left : 0;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    text-align: center;
+}
+
+.container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color:  aliceblue;
+    height: 500px;
+    width: 400px;
+    padding: 20px;
+}
+
+form{
+    text-align: center;
+    width: 70%;
+}
+
+input{
+    width: 100%;
+    height: 20px;
+    border: 2px solid white;
+    background-color:aliceblue;
+}
+
+.btn{
+    width: 70%;
+    height: 10%;
+    color: white;
+    background-color: gray;
+    border: 0;
+}
+
+.info{
+    padding-bottom:20px;
+}
+
+.info-text{
+    text-align: left;
+}
+
+p{
+    text-align: left;
+    font-size: 10px;
+    font-weight: 500;
+    margin: 0;
+    margin-top: 1px;
+}
+
+#name-correct{
+    color: green;
+    display: none;
+}
+#name-wrong{
+    color: red;
+    display: none;
+}
+#email-correct{
+    color: green;
+    display: none;
+}
+#email-wrong{
+    color: red;
+    display: none;
+}
+#age-correct{
+    color: green;
+    display: none;
+}
+.age-wrong{
+    color: red;
+    display: none;
+}
+#pass-correct{
+    color: green;
+    display: none;
+}
+.pass-wrong{
+    color: red;
+    display: none;
+}
+#repass-correct{
+    color: green;
+    display: none;
+}
+#repass-wrong{
+    color: red;
+    display: none;
+}
+
+.correct-modal-bg{
+    display: none;
+    position: fixed;
+    align-items: center;
+    justify-content: center;
+    top : 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+
+}
+
+.correct-modal{
+    text-align: center;
+    background-color: white;
+    padding: 24px 16px;
+    border-radius: 4px;
+    height: 120px;
+    width: 320px;
+}
+
+#correct-btn{
+    text-align: right;
+}

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2 id = "number">0</h2>
+    <button id = "increase">+1</button>
+    <button id = "decrease">-1</button>
+</body>
+</html>
+<script>
+//    function in_click(){
+//     console.log("increase 가 클릭됨");
+//     document.getElementById('number').innerHTML++;
+//    } 속성에 onclick="in_click()"추가해줘야함 
+
+//    function de_click(){
+//     console.log("decrease 가 클릭됨");
+//     document.getElementById('number').innerHTML--;
+//    } 속성에 onclick="de_click()" 추가해줘야함
+
+    const number = document.getElementById('number');
+    const increase = document.getElementById('increase');
+    const decrease = document.getElementById('decrease');
+
+    increase.onclick = () =>{
+        console.log("increase 가 클릭됨");
+        number.innerHTML++;
+    }
+
+    decrease.onclick = () => {
+        console.log("decrease 가 클릭됨");
+        number.innerHTML--;
+    }
+</script>
