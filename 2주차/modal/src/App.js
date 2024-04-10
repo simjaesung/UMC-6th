@@ -8,8 +8,6 @@ function App() {
   let [modal,setModal] = useState(0);
   let dispatch = useDispatch();
   let redux = useSelector((state) => {return state});
-  console.log(redux.modal);
-
   return (
     <div className="App">
       <h1>안녕하세요!</h1>
