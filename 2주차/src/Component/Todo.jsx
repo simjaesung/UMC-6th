@@ -17,9 +17,19 @@ function Todo() {
         <div className="input-box">
           <input placeholder = "UMC 스터디 계획을 작성해보세요!"
           id = "newtask"
-          onChange={(e)=>{setNewTask(e.target.value);}}/>
+          onChange={(e)=>{setNewTask(e.target.value);}}
+          onKeyUp={(e)=>{
+            if (window.event.keyCode == 13){
+              if(newTask){
+                e.preventDefault();
+                document.getElementById("newtaskbtn").click();
+                setNewTask("");
+              }
+              
+            }
+          }}/>
           <div>
-            <button onClick={()=>{
+            <button id="newtaskbtn" onClick={()=>{
               if(newTask){
                 let newTodo = [...todo];
                 newTodo.push({
