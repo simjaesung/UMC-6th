@@ -12,7 +12,7 @@ function App() {
         <Route path="/" element = {<Main/>}/>
         <Route path="/count" element = {<Count/>}/>
         <Route path="/init" element = {<Init/>}/>
-        <Route path="/todo" element = {<Todo/>}/>
+        <Route path="/todo" element = {<Todo/>}/> 
       </Routes>
     </div>
   );
