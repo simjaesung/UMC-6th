@@ -1,0 +1,64 @@
+*{
+    box-sizing: border-box;
+}
+
+body{
+    margin: 0;
+}
+
+
+.wrapper{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    background: lightblue;
+    height: 100vh;
+    
+}
+
+.container{
+    width: 70%;
+    margin-top: -50%;
+}
+
+.title{
+    text-align: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid whitesmoke;
+}
+.input{
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+input{
+    width: 100%;
+}
+.tasks{
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+}
+
+.todo{
+    width: 40%;
+}
+
+.done{
+    width: 40%;
+}
+
+.task{
+    width: 100%;
+    display: flex;
+    margin-top: 10px;
+}
+
+
+.tasktext{
+    width: 60%;
+}
+.taskbtn{
+    width: 40%;
+}
