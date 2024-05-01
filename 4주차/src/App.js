@@ -18,7 +18,7 @@ let Navbar = styled.div`
   justify-content: space-around;
   align-items: center;
   height: 10vh;
-  font-size: 20px;
+  font-size: 25px;
 `;
 let NavLink = styled.div`
   &:hover {

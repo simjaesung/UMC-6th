@@ -2,7 +2,7 @@ import styled from "styled-components";
 import {useState, useEffect} from "react";
 import axios from "axios";
 import Spinner from "react-bootstrap/Spinner";
-import {useNavigate} from "react-router-dom";
+import Card from "../component/Card";
 
 let MoviesContainer = styled.div`
   display: grid;
@@ -10,24 +10,6 @@ let MoviesContainer = styled.div`
   height: 100%;
   width: 100%;
   gap: 5px;
-`;
-let MovieContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  background: black;
-  color: aliceblue;
-  border: 2px solid red;
-`;
-
-let MoviePoster = styled.div`
-  height: 80%;
-`;
-
-let MovieInfor = styled.div`
-  padding-top: 10px;
-  display: flex;
-  justify-content: space-around;
-  font-size: 80%;
 `;
 
 let SpinnerBox = styled.div`
@@ -41,7 +23,6 @@ let SpinnerBox = styled.div`
 function Upcoming() {
   const [movies, setMovies] = useState([]);
   let [loading, setLoading] = useState(0);
-  let navigate = useNavigate();
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -72,24 +53,7 @@ function Upcoming() {
       {loading ? (
         <MoviesContainer>
           {movies.map(function (movie, i) {
-            return (
-              <MovieContent key={i}>
-                <MoviePoster
-                  onClick={() => {
-                    navigate("/movies/" + movie.original_title, {state: movie});
-                  }}>
-                  <img
-                    src={"https://image.tmdb.org/t/p/w500" + movie.poster_path}
-                  />
-                </MoviePoster>
-                <MovieInfor>
-                  <div style={{width: "60%"}}>{movie.original_title}</div>
-                  <div style={{textAlign: "center"}}>
-                    ⭐️ {movie.vote_average}
-                  </div>
-                </MovieInfor>
-              </MovieContent>
-            );
+            return <Card movie={movie} />;
           })}
         </MoviesContainer>
       ) : (

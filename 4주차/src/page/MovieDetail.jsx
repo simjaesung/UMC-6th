@@ -4,8 +4,7 @@ import "../App.css";
 
 let MovieDetailBG = styled.div`
   height: 100vh;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-    url(${(props) => "https://image.tmdb.org/t/p/w500" + props.bg});
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${(props) => "https://image.tmdb.org/t/p/w500" + props.bg});
   background-size: cover;
   background-position: center;
   align-items: center;
@@ -22,8 +21,7 @@ let MovieDetailBox = styled.div`
 
 let MovieDetailImg = styled.div`
   width: 40%;
-  background-image: url(${(props) =>
-    "https://image.tmdb.org/t/p/w500" + props.bg});
+  background-image: url(${(props) => "https://image.tmdb.org/t/p/w500" + props.bg});
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
@@ -43,14 +41,12 @@ let MovieDetailInfor = styled.div`
 
 function MoiveDetail() {
   let {name} = useParams();
-  let average = []; //평점의 내림수 만큼 ⭐️을 담을 배열
   const {state} = useLocation();
-  console.log(state);
   let tmp = Math.floor(state.vote_average);
-  for (var i = 0; i < tmp; i++) {
-    average.push("⭐️");
-  }
-  console.log(average);
+  const averStar = (val) => {
+    return "⭐️".repeat(val);
+  };
+
   return (
     <MovieDetailBG bg={state.backdrop_path}>
       <MovieDetailBox>
@@ -61,10 +57,7 @@ function MoiveDetail() {
           </div>
           <div>
             <h3>
-              평점 :
-              {average.map((a, i) => {
-                return a;
-              })}
+              평점 : {averStar(tmp)} ({tmp})
             </h3>
           </div>
           <div>
@@ -73,13 +66,7 @@ function MoiveDetail() {
           <div>
             <h3>줄거리</h3>
           </div>
-          <div>
-            {state.overview ? (
-              <p>{state.overview}</p>
-            ) : (
-              <p>TMDB에서 제공하는 줄거리가 없습니다.</p>
-            )}
-          </div>
+          <div>{state.overview ? <p>{state.overview}</p> : <p>TMDB에서 제공하는 줄거리가 없습니다.</p>}</div>
         </MovieDetailInfor>
       </MovieDetailBox>
     </MovieDetailBG>

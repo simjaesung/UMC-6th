@@ -2,7 +2,7 @@ import styled from "styled-components";
 import {useState, useEffect} from "react";
 import axios from "axios";
 import Spinner from "react-bootstrap/Spinner";
-import {useNavigate} from "react-router-dom";
+import Card from "../component/Card";
 
 let MoviesContainer = styled.div`
   display: grid;
@@ -11,24 +11,6 @@ let MoviesContainer = styled.div`
   width: 100%;
   gap: 5px;
 `;
-let MovieContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  background: black;
-  color: aliceblue;
-  border: 2px solid red;
-`;
-
-let MoviePoster = styled.div`
-  height: 80%;
-`;
-
-let MovieInfor = styled.div`
-  padding-top: 10px;
-  display: flex;
-  justify-content: space-around;
-  font-size: 80%;
-`;
 
 let SpinnerBox = styled.div`
   display: flex;
@@ -36,24 +18,21 @@ let SpinnerBox = styled.div`
   align-items: center;
   font-size: 50px;
   height: 90vh;
+  overflow: hidden;
 `;
 
 function NowPlaying() {
   const [movies, setMovies] = useState([]);
   let [loading, setLoading] = useState(0);
-  let navigate = useNavigate();
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const response = await axios.get(
-          "https://api.themoviedb.org/3/movie/now_playing",
-          {
-            params: {
-              api_key: "5009ee1ef99802b8b3a1b0ccd69e274c", // 여기에 TMDB API 키를 입력하세요
-              language: "ko-KR", // 원하는 언어 설정
-            },
+        const response = await axios.get("https://api.themoviedb.org/3/movie/now_playing", {
+          params: {
+            api_key: "5009ee1ef99802b8b3a1b0ccd69e274c", // 여기에 TMDB API 키를 입력하세요
+            language: "ko-KR", // 원하는 언어 설정
           },
-        );
+        });
         setMovies(response.data.results); // 영화 데이터 상태 업데이트
         setTimeout(() => {
           setLoading(1);
@@ -72,33 +51,12 @@ function NowPlaying() {
       {loading ? (
         <MoviesContainer>
           {movies.map(function (movie, i) {
-            return (
-              <MovieContent key={i}>
-                <MoviePoster
-                  onClick={() => {
-                    navigate("/movies/" + movie.original_title, {state: movie});
-                  }}>
-                  <img
-                    src={"https://image.tmdb.org/t/p/w500" + movie.poster_path}
-                  />
-                </MoviePoster>
-                <MovieInfor>
-                  <div style={{width: "60%"}}>{movie.original_title}</div>
-                  <div style={{textAlign: "center"}}>
-                    ⭐️ {movie.vote_average}
-                  </div>
-                </MovieInfor>
-              </MovieContent>
-            );
+            return <Card movie={movie} />;
           })}
         </MoviesContainer>
       ) : (
         <SpinnerBox>
-          <Spinner
-            animation="border"
-            variant="secondary"
-            style={{width: "5rem", height: "5rem"}}
-          />
+          <Spinner animation="border" variant="secondary" style={{width: "5rem", height: "5rem"}} />
         </SpinnerBox>
       )}
     </>
