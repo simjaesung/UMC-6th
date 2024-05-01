@@ -1,7 +1,6 @@
-import logo from './logo.svg';
 import styled from 'styled-components'
 import './App.css';
-import {Routes, Route, Link, useNavigate } from 'react-router-dom';
+import {Routes, Route, useNavigate } from 'react-router-dom';
 import Home from './page/MainPage';
 import NowPlaying from './page/NowPlayingPage';
 import Popular from './page/PopularPage';

@@ -2,7 +2,7 @@ import styled from "styled-components";
 import {useState, useEffect} from "react";
 import axios from "axios";
 import Spinner from "react-bootstrap/Spinner";
-import MoiveDetail from "../component/MovieDetail";
+import {useNavigate} from "react-router-dom";
 
 let MoviesContainer = styled.div`
   display: grid;
@@ -41,8 +41,7 @@ let SpinnerBox = styled.div`
 function NowPlaying() {
   const [movies, setMovies] = useState([]);
   let [loading, setLoading] = useState(0);
-  let [modal, setModal] = useState(0);
-  let [num, setNum] = useState(0);
+  let navigate = useNavigate();
   useEffect(() => {
     const fetchMovies = async () => {
       try {
@@ -77,8 +76,7 @@ function NowPlaying() {
               <MovieContent key={i}>
                 <MoviePoster
                   onClick={() => {
-                    setModal(1);
-                    setNum(i);
+                    navigate("/movies/" + movie.original_title, {state: movie});
                   }}>
                   <img
                     src={"https://image.tmdb.org/t/p/w500" + movie.poster_path}
@@ -90,14 +88,6 @@ function NowPlaying() {
                     ⭐️ {movie.vote_average}
                   </div>
                 </MovieInfor>
-                {modal ? (
-                  <MoiveDetail
-                    movies={movies}
-                    i={i}
-                    num={num}
-                    setModal={setModal}
-                  />
-                ) : null}
               </MovieContent>
             );
           })}
