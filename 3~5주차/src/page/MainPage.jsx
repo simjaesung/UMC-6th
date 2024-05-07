@@ -1,7 +1,8 @@
 import styled from "styled-components";
-import {IoSearch} from "react-icons/io5";
+import { IoSearch } from "react-icons/io5";
 import axios from "axios";
-import {useState, useEffect} from "react";
+import { useState, useEffect } from "react";
+import Card from "../component/Card";
 let HomeBanner = styled.div`
   display: flex;
   color: black;
@@ -17,7 +18,7 @@ let HomeSearch = styled.div`
   display: flex;
   color: white;
   background: black;
-  height: 60vh;
+  height: 100vh;
   align-items: center;
   flex-direction: column;
   padding-top: 10%;
@@ -26,7 +27,7 @@ let HomeSearch = styled.div`
 
 let SearchBox = styled.div`
   display: flex;
-  font-size: 20px;
+  font-size: 15px;
   align-items: center;
   justify-content: center;
   width: 50%;
@@ -40,28 +41,25 @@ let Search = styled.input`
 
 function Home() {
   const [movies, setMovies] = useState([]);
+  let [keyWord, setKeyword] = useState("");
+
+  const searchMovies = async (e) => {
+    const apiKey = "5009ee1ef99802b8b3a1b0ccd69e274c";
+    const url = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${keyWord}`;
+
+    try {
+      const response = await axios.get(url);
+      setMovies(response.data.results);
+    } catch (error) {
+      console.error("검색 중 오류 발생:", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchMovies = async () => {
-      try {
-        const response = await axios.get(
-          "https://api.themoviedb.org/3/movie/popular",
-          {
-            params: {
-              api_key: "5009ee1ef99802b8b3a1b0ccd69e274c", // 여기에 TMDB API 키를 입력하세요
-              language: "ko-KR", // 원하는 언어 설정
-            },
-          },
-        );
-        setMovies(response.data.results); // 영화 데이터 상태
-        console.log(movies);
-      } catch (error) {
-        console.error("영화 데이터를 가져오는 데 실패했습니다.", error);
-      }
-    };
-    fetchMovies();
-  }, []); // 컴포넌트가 마운트될 때 한 번만 실행
-
+    if (keyWord.trim()) {
+      searchMovies();
+    }
+  }, [keyWord]);
   return (
     <>
       <HomeBanner>
@@ -70,9 +68,14 @@ function Home() {
       <HomeSearch>
         <h2>Find your movies!</h2>
         <SearchBox>
-          <Search />
-          <IoSearch style={{fontSize: "30px"}} />
+          <Search
+            onChange={(e) => {
+              setKeyword(e.target.value);
+            }}
+          />
+          <IoSearch style={{ fontSize: "30px" }} />
         </SearchBox>
+        <ul>{keyWord ? movies.map((movie) => <Card movie={movie} />) : null}</ul>
       </HomeSearch>
     </>
   );
