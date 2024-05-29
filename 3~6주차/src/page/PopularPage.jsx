@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import {useState, useEffect} from "react";
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Spinner from "react-bootstrap/Spinner";
 import Card from "../component/Card";
@@ -20,22 +21,41 @@ let SpinnerBox = styled.div`
   height: 90vh;
 `;
 
+let PageNationContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: black;
+  height: 10vh;
+`;
+let PageNationBox = styled.div`
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: black;
+  color: white;
+  width: 10%;
+  > div {
+    cursor: pointer;
+  }
+`;
+
 function Popular() {
   const [movies, setMovies] = useState([]);
   let [loading, setLoading] = useState(0);
+  let { page } = useParams();
+  let navigate = useNavigate();
 
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const response = await axios.get(
-          "https://api.themoviedb.org/3/movie/popular",
-          {
-            params: {
-              api_key: "5009ee1ef99802b8b3a1b0ccd69e274c", // 여기에 TMDB API 키를 입력하세요
-              language: "ko-KR", // 원하는 언어 설정
-            },
+        const response = await axios.get("https://api.themoviedb.org/3/movie/popular", {
+          params: {
+            api_key: "5009ee1ef99802b8b3a1b0ccd69e274c", // 여기에 TMDB API 키를 입력하세요
+            language: "ko-KR", // 원하는 언어 설정
+            page: page,
           },
-        );
+        });
         setMovies(response.data.results); // 영화 데이터 상태 업데이트
         setTimeout(() => {
           setLoading(1);
@@ -46,25 +66,44 @@ function Popular() {
     };
 
     fetchMovies();
-  }, []); // 컴포넌트가 마운트될 때 한 번만 실행
+  }, [page]);
 
   return (
     <>
       {loading ? (
         <MoviesContainer>
           {movies.map(function (movie, i) {
-            return <Card movie={movie} />;
+            return <Card movie={movie} key={i} />;
           })}
         </MoviesContainer>
       ) : (
         <SpinnerBox>
-          <Spinner
-            animation="border"
-            variant="secondary"
-            style={{width: "5rem", height: "5rem"}}
-          />
+          <Spinner animation="border" variant="secondary" style={{ width: "5rem", height: "5rem" }} />
         </SpinnerBox>
       )}
+      <PageNationContainer>
+        <PageNationBox>
+          {page > 1 ? (
+            <div
+              onClick={() => {
+                page--;
+                navigate("/popular/" + page);
+              }}>
+              ◀︎
+            </div>
+          ) : (
+            <div>⛔︎</div>
+          )}
+          {page}
+          <div
+            onClick={() => {
+              page++;
+              navigate("/popular/" + page);
+            }}>
+            ▶︎
+          </div>
+        </PageNationBox>
+      </PageNationContainer>
     </>
   );
 }

@@ -8,9 +8,11 @@ import Toprater from "./page/TopraterPage";
 import Upcoming from "./page/Upcoming";
 import MoiveDetail from "./page/MovieDetail";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NotFound from "./page/NotFound";
 import SignUp from "./page/SignUp";
+import Login from "./page/Login";
+import { useCookies } from "react-cookie";
 
 let Navbar = styled.div`
   display: flex;
@@ -31,7 +33,22 @@ let NavLink = styled.div`
 `;
 function App() {
   let navigate = useNavigate();
-  let [login, setLogin] = useState("회원가입");
+  let [sign, setSign] = useState(1);
+  let [login, setLogin] = useState(0);
+  const [cookies, setCookie, removeCookie] = useCookies(["connect.sid"]);
+  let isCookies = cookies["connect.sid"];
+  console.log(isCookies);
+  useEffect(() => {
+    //쿠키가 존재하는 경우 nav의 로그인 -> 로그아웃, 회원가입을 가림
+    if (isCookies) {
+      setLogin(1);
+      setSign(0);
+    } else {
+      setLogin(0);
+      setSign(1);
+    }
+  }, [isCookies]);
+
   return (
     <div className="App">
       <Navbar className="nav">
@@ -42,45 +59,64 @@ function App() {
           }}>
           UMC Movie
         </NavLink>
+        {login ? (
+          <NavLink
+            onClick={() => {
+              removeCookie("connect.sid");
+              setLogin(0);
+            }}>
+            로그아웃
+          </NavLink>
+        ) : (
+          <NavLink
+            onClick={() => {
+              navigate("/login");
+            }}>
+            로그인
+          </NavLink>
+        )}
+        {sign ? (
+          <NavLink
+            onClick={() => {
+              navigate("/signup");
+            }}>
+            회원가입
+          </NavLink>
+        ) : null}
         <NavLink
           onClick={() => {
-            navigate("/signup");
-          }}>
-          {login}
-        </NavLink>
-        <NavLink
-          onClick={() => {
-            navigate("popular");
+            navigate("/popular/1");
           }}>
           Popular
         </NavLink>
         <NavLink
           onClick={() => {
-            navigate("nowplaying");
+            navigate("/nowplaying");
           }}>
           Now Playing
         </NavLink>
         <NavLink
           onClick={() => {
-            navigate("toprater");
+            navigate("/toprater");
           }}>
           Top Rated
         </NavLink>
         <NavLink
           onClick={() => {
-            navigate("upcoming");
+            navigate("/upcoming");
           }}>
           Upcoming
         </NavLink>
       </Navbar>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/popular" element={<Popular />} />
+        <Route path="/popular/:page" element={<Popular />} />
         <Route path="/nowplaying" element={<NowPlaying />} />
         <Route path="/toprater" element={<Toprater />} />
         <Route path="/upcoming" element={<Upcoming />} />
         <Route path="/movies/:id" element={<MoiveDetail />} />
-        <Route path="signup" element={<SignUp />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/login" element={<Login />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>

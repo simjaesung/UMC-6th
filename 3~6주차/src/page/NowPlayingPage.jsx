@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import {useState, useEffect} from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import Spinner from "react-bootstrap/Spinner";
 import Card from "../component/Card";
@@ -24,43 +24,63 @@ let SpinnerBox = styled.div`
 function NowPlaying() {
   const [movies, setMovies] = useState([]);
   let [loading, setLoading] = useState(0);
-  useEffect(() => {
-    const fetchMovies = async () => {
-      try {
-        const response = await axios.get("https://api.themoviedb.org/3/movie/now_playing", {
-          params: {
-            api_key: "5009ee1ef99802b8b3a1b0ccd69e274c", // 여기에 TMDB API 키를 입력하세요
-            language: "ko-KR", // 원하는 언어 설정
-          },
-        });
-        setMovies(response.data.results); // 영화 데이터 상태 업데이트
-        setTimeout(() => {
-          setLoading(1);
-          console.log(movies);
-        }, 500);
-      } catch (error) {
-        console.error("영화 데이터를 가져오는 데 실패했습니다.", error);
-      }
-    };
+  let [page, setPage] = useState(1);
+  const target = useRef(null);
 
-    fetchMovies();
-  }, []); // 컴포넌트가 마운트될 때 한 번만 실행
+  const fetchMovies = async (page) => {
+    try {
+      const response = await axios.get("https://api.themoviedb.org/3/movie/now_playing", {
+        params: {
+          api_key: "5009ee1ef99802b8b3a1b0ccd69e274c", // 여기에 TMDB API 키를 입력하세요
+          language: "ko-KR", // 원하는 언어 설정
+          page: page,
+        },
+      });
+      let tmp = [...movies, ...response.data.results];
+      setMovies(tmp); // 영화 데이터 상태 업데이트
+      setTimeout(() => {
+        setLoading(1);
+      }, 500);
+    } catch (error) {
+      console.error("영화 데이터를 가져오는 데 실패했습니다.", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchMovies(page);
+    console.log(page);
+  }, [page]);
+
+  useEffect(() => {
+    observer.observe(target.current);
+  }, []);
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        setLoading(0);
+        setPage((prev) => prev + 1);
+        // 추가 작업을 여기에 구현할 수 있습니다.
+      }
+    });
+  });
 
   return (
     <>
+      <MoviesContainer>
+        {movies.map(function (movie, i) {
+          return <Card movie={movie} key={i} />;
+        })}
+      </MoviesContainer>
       {loading ? (
-        <MoviesContainer>
-          {movies.map(function (movie, i) {
-            return <Card movie={movie} />;
-          })}
-        </MoviesContainer>
+        <div style={{ height: "10px", backgroundColor: "black" }} ref={target}></div>
       ) : (
         <SpinnerBox>
-          <Spinner animation="border" variant="secondary" style={{width: "5rem", height: "5rem"}} />
+          <Spinner animation="border" variant="secondary" style={{ width: "5rem", height: "5rem" }} />
         </SpinnerBox>
       )}
+      <div style={{ height: "10px", backgroundColor: "white" }} ref={target}></div>
     </>
   );
 }
-
 export default NowPlaying;

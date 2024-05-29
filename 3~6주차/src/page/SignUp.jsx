@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
-
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 let SingupBG = styled.div`
   background: #070f2b;
   display: flex;
@@ -35,6 +36,10 @@ let SubBtn = styled.button`
 let AlreadyBox = styled.div`
   display: flex;
   justify-content: space-around;
+  > div span {
+    cursor: pointer;
+    font-weight: 700;
+  }
 `;
 
 let Checktype = styled.div`
@@ -46,6 +51,7 @@ let Checktype = styled.div`
 `;
 
 function SignUp() {
+  let navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -56,9 +62,21 @@ function SignUp() {
   return (
     <SingupBG>
       <SingupContainer
-        onSubmit={handleSubmit((data) => {
-          console.log(data);
-          alert("회원가입 성공!");
+        onSubmit={handleSubmit(async (data) => {
+          await axios({
+            method: "post",
+            url: "http://localhost:8080/auth/signup",
+            data: data,
+          })
+            .then(function (response) {
+              console.log(response);
+              alert(response.data.message);
+              navigate("/login");
+            })
+            .catch(function (error) {
+              alert(error.response.data);
+              console.log(error);
+            });
         })}>
         <h2>회원가입 페이지</h2>
         <InputBox
@@ -70,6 +88,16 @@ function SignUp() {
           })}
         />
         {errors.name && <Checktype>{errors.name.message}</Checktype>}
+        <InputBox
+          id="username"
+          type="text"
+          placeholder="아이디를 입력해주세요."
+          {...register("username", {
+            required: "아이디를 입력해주세요!",
+            pattern: {},
+          })}
+        />
+        {errors.username && <Checktype>{errors.username.message}</Checktype>}
         <InputBox
           id="email"
           type="email"
@@ -120,7 +148,7 @@ function SignUp() {
         />
         {errors.password && <Checktype>{errors.password.message}</Checktype>}
         <InputBox
-          id="checkpassword"
+          id="passwordCheck"
           type="password"
           placeholder="비밀번호 확인"
           {...register("checkpassword", {
@@ -133,7 +161,14 @@ function SignUp() {
         <SubBtn type="submit">제출하기</SubBtn>
         <AlreadyBox>
           <div>이미 아이디가 있으신가요?</div>
-          <div>로그인 페이지로 이동하기</div>
+          <div>
+            <span
+              onClick={() => {
+                navigate("/login");
+              }}>
+              로그인 페이지로 이동하기
+            </span>
+          </div>
         </AlreadyBox>
       </SingupContainer>
     </SingupBG>

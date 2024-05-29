@@ -39,7 +39,6 @@ let MovieHiddenInfor = styled.div`
 `;
 
 function Card({ movie, size }) {
-  console.log(movie);
   let navigate = useNavigate();
   let [hover, showHover] = useState(false);
   return (

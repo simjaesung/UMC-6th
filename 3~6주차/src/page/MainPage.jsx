@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import Card from "../component/Card";
 import useDebounce from "../component/Debounce";
 import Spinner from "react-bootstrap/Spinner";
+import { useCookies } from "react-cookie";
 let HomeBanner = styled.div`
   display: flex;
   color: black;
@@ -80,6 +81,7 @@ function Home() {
   //검색 결과 스타일 컴포넌트 컨테이너의 props
   let [loading, setLoading] = useState(0);
   const debouncedQuery = useDebounce(query, 500);
+  const [cookies, setCookie, removeCookie] = useCookies(["id"]);
 
   useEffect(() => {
     if (query) {
@@ -103,9 +105,7 @@ function Home() {
   };
   return (
     <>
-      <HomeBanner>
-        <div>환영합니다</div>
-      </HomeBanner>
+      <HomeBanner>{cookies["id"] ? <div>{cookies["id"]}님 환영합니다!</div> : <div>환영합니다!</div>}</HomeBanner>
       <HomeSearch>
         <h2>Find your movies!</h2>
         <SearchBox>
