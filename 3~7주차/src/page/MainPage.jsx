@@ -21,7 +21,7 @@ let HomeSearch = styled.div`
   display: flex;
   color: white;
   background: black;
-  height: 80vh;
+  height: 65vh;
   align-items: center;
   flex-direction: column;
   padding-top: 20px;

@@ -11,7 +11,7 @@ let SingupBG = styled.div`
 
 let SingupContainer = styled.form`
   padding-top: 5%;
-  width: 40%;
+  width: 60%;
   height: 100%;
   text-align: center;
   color: white;
